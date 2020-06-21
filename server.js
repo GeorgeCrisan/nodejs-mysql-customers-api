@@ -20,6 +20,7 @@ const mysqlConnection = mysql.createConnection({
   password: mysqlDbConfig.PASSWORD,
   database: mysqlDbConfig.DB,
   port: PORT,
+  multipleStatements: true
 });
 
 mysqlConnection.connect((error,connection)=>{
