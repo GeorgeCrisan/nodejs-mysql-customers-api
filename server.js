@@ -6,8 +6,9 @@ const cookieParser = require('cookie-parser')();
 const Knex = require('knex');
 const { Model } = require('objection');
 
-const Customer = require('./models/Customer');
 
+//Customer Model and Router
+const customerRouter = require('./Routes/CustomerRouter');
 const app = express();
 
 app.use(cookieParser);
@@ -15,19 +16,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({ origin: false }));
 
-console.log(Customer);
-
-//Import Configs
+//Import Configs (to be moved in .nev)
 const { mysqlDbConfig } = require('./config');
-
-console.log(mysqlDbConfig);
 
 //Settings
 const PORT = process.env.PORT ? process.env.PORT : 8383;
 
 
 // Initialize knex.
-const knex = Knex({
+const db = Knex({
   client: 'mysql',
   connection: {
     host: mysqlDbConfig.HOST,
@@ -50,19 +47,19 @@ const knex = Knex({
 });
 
 // Give the knex instance to objection.
-Model.knex(knex);
-
-
+Model.knex(db);
 
 
 app.get("/", async (req, res) => {
   try {
-    let data =await knex.select("*").from('members');
+    let data =await db.select("*").from('members');
     res.json({ data: data });
   } catch(error) {
     res.json({ message: "Api error", error: error });
   }
 });
+
+app.use('/customer/', customerRouter);
 
 app.get("*", async (req, res) => {
   res.json({ message: "Nothing here. Try an existing route instead?" });
