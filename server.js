@@ -6,9 +6,6 @@ const cookieParser = require('cookie-parser')();
 const Knex = require('knex');
 const { Model } = require('objection');
 
-
-//Customer Model and Router
-const customerRouter = require('./Routes/CustomerRouter');
 const app = express();
 
 app.use(cookieParser);
@@ -29,7 +26,7 @@ const db = Knex({
   connection: {
     host: mysqlDbConfig.HOST,
     database: mysqlDbConfig.DB,
-    user:     mysqlDbConfig.USER,
+    user: mysqlDbConfig.USER,
     password: mysqlDbConfig.PASSWORD,
     options: {
       port: mysqlDbConfig.PORT
@@ -41,8 +38,8 @@ const db = Knex({
     max: 10,
     afterCreate: (conn, done) => {
       console.log('Connection made!');
-        done(false, conn)
-      }
+      done(false, conn)
+    }
   }
 });
 
@@ -52,14 +49,14 @@ Model.knex(db);
 
 app.get("/", async (req, res) => {
   try {
-    let data =await db.select("*").from('members');
+    let data = await db.select("*").from('customers');
     res.json({ data: data });
-  } catch(error) {
+  } catch (error) {
     res.json({ message: "Api error", error: error });
   }
 });
 
-app.use('/customer/', customerRouter);
+app.use('/customer/', require('./Routes/CustomerRouter')({ db: db }));
 
 app.get("*", async (req, res) => {
   res.json({ message: "Nothing here. Try an existing route instead?" });
