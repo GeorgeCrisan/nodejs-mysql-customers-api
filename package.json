@@ -4,7 +4,8 @@
   "description": "Node.js REST-ful CRUD API Node.js Express mysql",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "startServer": "nodemon --watch server.js 8383"
   },
   "repository": {
     "type": "git",
@@ -31,5 +32,8 @@
     "knex": "^0.21.1",
     "mysql": "^2.18.1",
     "objection": "^2.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
   }
 }
