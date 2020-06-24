@@ -22,8 +22,26 @@ module.exports = function (db) {
     }
   })
   // define the about route
-  router.get('/:id', function (req, res) {
-    res.send('get a specific customer')
+  //http://localhost:8383/customer/id/173
+
+  router.get('/id/:id', async function (req, res) {
+    console.log(req.params,'here');
+    try{
+    let data = await Customer.query().findById(req.params.id);
+    res.json({ data: data });
+  } catch (error) {
+    res.json({ message: "Api error", error: error });
+  }
+  });
+
+  router.get('/repsEmpoyees', async function (req, res) {
+    console.log(req.params,'here');
+    try{
+    //To do Write a complex query to get all the representants empoyees for each customer
+    res.json({ data: false });
+  } catch (error) {
+    res.json({ message: "Api error", error: error });
+  }
   });
 
   return router;
